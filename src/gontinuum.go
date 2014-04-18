@@ -27,6 +27,7 @@ package main
 import (
     "os"
     "fmt"
+    "path"
     "os/exec"
     "io/ioutil"
     "path/filepath"
@@ -82,20 +83,25 @@ func loadConfig(file string) Config {
     return config
 }
 
-func buildModule(name string, config Config) Build {
-    fmt.Printf("Building '%s'... ", name)
+func buildModule(module string, config Config) Build {
+    fmt.Printf("Building '%s'... ", module)
+    module_dir := path.Join(config.Directory, module)
     // go in build directory
     err := os.Chdir(config.Directory)
     if err != nil {
-        return Build{ Success: false, Output: err.Error() }
+        return Build {
+            Success: false,
+            Output: err.Error(),
+        }
     }
     // delete module directory if it already exists
-    if _, err := os.Stat(name); err == nil {
-        os.RemoveAll(name)
+    if _, err := os.Stat(module_dir); err == nil {
+        os.RemoveAll(module_dir)
     }
     // git clone the module repository
-    cmd := exec.Command("git", "clone", config.Modules[name].Url)
+    cmd := exec.Command("git", "clone", config.Modules[module].Url)
     output, err := cmd.CombinedOutput()
+    defer os.RemoveAll(module_dir)
     if err != nil {
         fmt.Println("ERROR")
         return Build{
@@ -103,9 +109,9 @@ func buildModule(name string, config Config) Build {
             Output: string(output),
         }
     } else {
-        os.Chdir(name)
+        os.Chdir(module_dir)
         // run the build command
-        cmd := exec.Command("bash", "-c", config.Modules[name].Command)
+        cmd := exec.Command("bash", "-c", config.Modules[module].Command)
         output, err := cmd.CombinedOutput()
         if err != nil {
             fmt.Println("ERROR")
