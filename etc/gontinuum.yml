@@ -1,0 +1,13 @@
+directory:  /tmp
+email:
+  smtp_host: smtp.orange.fr
+  recipient: casa@sweetohm.net
+  sender:    casa@sweetohm.net
+  success:   true
+
+modules:
+  continuum:
+    url:     https://github.com/c4s4/continuum.git
+    command: |
+      echo "TEST"
+

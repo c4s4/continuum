@@ -1,0 +1,24 @@
+- build:       gontinuum
+  description: Build project gontinuum
+  default:     run
+
+- properties:
+    name:       "gontinuum"
+    version:    "0.1.0"
+    build_dir:  "build"
+    src_dir:    "src"
+    main:       "#{src_dir}/#{name}.go"
+    etc_dir:    "etc"
+    etc_file:   "#{etc_dir}/#{name}.yml"
+    args:       :etc_file
+
+- target:      run
+  description: Run gontinuum
+  script:
+  - "go run #{main}"
+
+- target:      bin
+  description: Make binary
+  script:
+  - "go build #{main}"
+
