@@ -12,13 +12,15 @@
     etc_file:   "#{etc_dir}/#{name}.yml"
     args:       :etc_file
 
+- target:      bin
+  description: Make binary executable
+  script:
+  - mkdir: :build_dir
+  - "go build -o #{build_dir}/#{name} #{main}"
+
 - target:      run
+  depends:     bin
   description: Run gontinuum
   script:
-  - "go run #{main} #{args}"
-
-- target:      bin
-  description: Make binary
-  script:
-  - "go build #{main}"
+  - "#{build_dir}/#{name} #{args}"
 
