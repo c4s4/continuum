@@ -139,7 +139,7 @@ func buildModules(config Config) Builds {
 }
 
 func sendReport(builds Builds, duration time.Duration) {
-    fmt.Println("Done in %s", duration)
+    fmt.Println("Done in", duration)
     if builds.Success() {
         fmt.Println("OK")
     } else {
