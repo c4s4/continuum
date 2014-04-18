@@ -28,6 +28,7 @@ import (
     "os"
     "fmt"
     "path"
+    "time"
     "os/exec"
     "io/ioutil"
     "path/filepath"
@@ -137,11 +138,12 @@ func buildModules(config Config) Builds {
     return builds
 }
 
-func sendReport(builds Builds) {
+func sendReport(builds Builds, duration time.Duration) {
+    fmt.Println("Done in %s", duration)
     if builds.Success() {
         fmt.Println("OK")
     } else {
-        fmt.Println("ERROR")
+        fmt.Println("ERROR:")
         for module := range(builds) {
             fmt.Println("===================================")
             fmt.Println(module)
@@ -154,9 +156,11 @@ func sendReport(builds Builds) {
 
 func main() {
     for i:=1; i<len(os.Args); i++ {
+        start := time.Now()
         config := loadConfig(os.Args[i])
         builds := buildModules(config)
-        sendReport(builds)
+        duration := time.Since(start)
+        sendReport(builds, duration)
     }
 }
 
