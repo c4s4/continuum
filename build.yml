@@ -24,3 +24,8 @@
   script:
   - "#{build_dir}/#{name} #{args}"
 
+- target:      clean
+  description: Delete generated files
+  script:
+  - rmdir: :build_dir
+
