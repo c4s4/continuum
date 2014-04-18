@@ -15,7 +15,7 @@
 - target:      run
   description: Run gontinuum
   script:
-  - "go run #{main}"
+  - "go run #{main} #{args}"
 
 - target:      bin
   description: Make binary

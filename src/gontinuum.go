@@ -52,6 +52,17 @@ type Build struct {
     Output string
 }
 
+type Builds map[string]Build
+
+func (builds Builds) Success() bool {
+    for module := range(builds) {
+        if !builds[module].Success {
+            return false
+        }
+    }
+    return true
+}
+
 func loadConfig(file string) Config {
     config := Config{}
     text, err := ioutil.ReadFile(file)
@@ -112,34 +123,34 @@ func buildModule(name string, config Config) Build {
     }
 }
 
-func buildModules(config Config) map[string]Build {
-    builds := make(map[string]Build)
+func buildModules(config Config) Builds {
+    builds := make(Builds)
     for module := range(config.Modules) {
         builds[module] = buildModule(module, config)
     }
     return builds
 }
 
-func main() {
-    for i:=0; i<len(os.Args); i++ {
-        config := loadConfig(os.Args[i])
-        builds := buildModules(config)
-        sendReport(builds)
-    }
-}
-
-    success := true
-    if success {
+func sendReport(builds Builds) {
+    if builds.Success() {
         fmt.Println("OK")
     } else {
-        fmt.Println("ERROR:")
+        fmt.Println("ERROR")
         for module := range(builds) {
             fmt.Println("===================================")
             fmt.Println(module)
             fmt.Println("-----------------------------------")
             fmt.Println(builds[module].Output)
             fmt.Println("-----------------------------------")
-          }
+        }
+    }
+}
+
+func main() {
+    for i:=1; i<len(os.Args); i++ {
+        config := loadConfig(os.Args[i])
+        builds := buildModules(config)
+        sendReport(builds)
     }
 }
 

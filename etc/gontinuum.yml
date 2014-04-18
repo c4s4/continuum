@@ -1,4 +1,4 @@
-directory:  /tmp
+directory: /tmp
 email:
   smtp_host: smtp.orange.fr
   recipient: casa@sweetohm.net
