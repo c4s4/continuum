@@ -65,6 +65,15 @@ func (builds Builds) Success() bool {
     return true
 }
 
+func (builds Builds) SortedModules() []string {
+    modules := make([]string, len(builds))
+    i := 0
+    for module := range builds {
+        modules[i] = module
+    }
+    return sort.Strings(modules)
+}
+
 func loadConfig(file string) Config {
     config := Config{}
     text, err := ioutil.ReadFile(file)
@@ -158,7 +167,7 @@ func sendReport(builds Builds, duration time.Duration) {
     message += fmt.Fprintf("\nDone in %s\n", duration)
     message += if builds[module].Success { "OK" } else { "ERROR" }
     message += "\n\nReport:\n\n"
-    for module := sort.String(range(builds)) {
+    for module := range builds.SortedModules() {
         if !builds[module].Succes {
             fmt.Println("===================================")
             fmt.Println(module)
