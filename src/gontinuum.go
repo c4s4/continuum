@@ -143,8 +143,23 @@ func sendReport(builds Builds, duration time.Duration) {
     if builds.Success() {
         fmt.Println("OK")
     } else {
-        fmt.Println("ERROR:")
-        for module := range(builds) {
+        fmt.Println("ERROR")
+    }
+    subject string
+    if builds.Success() {
+        subject = fmt.Fprintf("Build on %s was a success", time.Now())
+    } else {
+        subject = fmt.Fprintf("Build on %s was a failure", time.Now())
+    }
+    message := subject + ":\n\n"
+    for module := sort.String(range(builds)){
+        message += fmt.Fprintf("  %s: %s\n", module, if builds[module].Success { "OK" } else { "ERROR" })
+    }
+    message += fmt.Fprintf("\nDone in %s\n", duration)
+    message += if builds[module].Success { "OK" } else { "ERROR" }
+    message += "\n\nReport:\n\n"
+    for module := sort.String(range(builds)) {
+        if !builds[module].Succes {
             fmt.Println("===================================")
             fmt.Println(module)
             fmt.Println("-----------------------------------")
@@ -152,6 +167,7 @@ func sendReport(builds Builds, duration time.Duration) {
             fmt.Println("-----------------------------------")
         }
     }
+    fmt.Println(message)
 }
 
 func main() {
