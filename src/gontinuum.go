@@ -51,8 +51,17 @@ type Config struct {
 }
 
 type Build struct {
+    Module string
     Success bool
     Output string
+}
+
+func (build Build) String() string {
+    if build.Success {
+        return fmt.Sprintf("%s: OK", build.Module)
+    } else {
+        return fmt.Sprintf("%s: ERROR", build.Module)
+    }
 }
 
 type Builds map[string]Build
@@ -66,13 +75,22 @@ func (builds Builds) Success() bool {
     return true
 }
 
+func (builds Builds) String() string {
+    if builds.Success() {
+        return "SUCCESS"
+    } else {
+        return "FAILURE"
+    }
+}
+
 func (builds Builds) SortedModules() []string {
     modules := make([]string, len(builds))
     i := 0
     for module := range builds {
         modules[i] = module
     }
-    return sort.Strings(modules)
+    sort.Strings(modules)
+    return modules
 }
 
 func loadConfig(file string) Config {
@@ -101,6 +119,7 @@ func buildModule(module string, config Config) Build {
     err := os.Chdir(config.Directory)
     if err != nil {
         return Build {
+            Module: module,
             Success: false,
             Output: err.Error(),
         }
@@ -116,6 +135,7 @@ func buildModule(module string, config Config) Build {
     if err != nil {
         fmt.Println("ERROR")
         return Build{
+            Module: module,
             Success: false,
             Output: string(output),
         }
@@ -127,12 +147,14 @@ func buildModule(module string, config Config) Build {
         if err != nil {
             fmt.Println("ERROR")
             return Build {
+                Module: module,
                 Success: false,
                 Output: string(output),
             }
         } else {
             fmt.Println("OK")
             return Build{
+                Module: module,
                 Success: true,
                 Output: string(output),
             }
@@ -150,23 +172,19 @@ func buildModules(config Config) Builds {
 
 func sendReport(builds Builds, duration time.Duration) {
     fmt.Println("Done in", duration)
-    if builds.Success() {
-        fmt.Println("OK")
-    } else {
-        fmt.Println("ERROR")
-    }
+    fmt.Println(builds.String())
     var subject string
     if builds.Success() {
-        subject = fmt.Fprintf("Build on %s was a success", time.Now())
+        subject = fmt.Sprintf("Build on %s was a success", time.Now())
     } else {
-        subject = fmt.Fprintf("Build on %s was a failure", time.Now())
+        subject = fmt.Sprintf("Build on %s was a failure", time.Now())
     }
     message := subject + ":\n\n"
-    for module := sort.String(range(builds)) {
-        message += fmt.Fprintf("  %s: %s\n", module, if builds[module].Success { "OK" } else { "ERROR" })
+    for module := range builds.SortedModules() {
+        message += fmt.Sprintf("  %s", builds[module].String())
     }
-    message += fmt.Fprintf("\nDone in %s\n", duration)
-    message += if builds[module].Success { "OK" } else { "ERROR" }
+    message += fmt.Sprintf("\nDone in %s\n", duration)
+    message += builds.String()
     message += "\n\nReport:\n\n"
     for module := range builds.SortedModules() {
         if !builds[module].Succes {
