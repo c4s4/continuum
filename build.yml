@@ -5,7 +5,7 @@
 - properties:
     name:       "gontinuum"
     version:    "0.1.0"
-    build_dir:  "build"
+    bin_dir:    "bin"
     src_dir:    "src"
     main:       "#{src_dir}/#{name}.go"
     etc_dir:    "etc"
@@ -15,17 +15,11 @@
 - target:      bin
   description: Make binary executable
   script:
-  - mkdir: :build_dir
-  - "go build -o #{build_dir}/#{name} #{main}"
+  - rm: "#{bin_dir}/#{name}"
+  - "go build -o #{bin_dir}/#{name} #{main}"
 
 - target:      run
   depends:     bin
   description: Run gontinuum
   script:
-  - "#{build_dir}/#{name} #{args}"
-
-- target:      clean
-  description: Delete generated files
-  script:
-  - rmdir: :build_dir
-
+  - "#{bin_dir}/#{name} #{args}"
