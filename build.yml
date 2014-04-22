@@ -4,10 +4,11 @@
 
 - properties:
     name:       "gontinuum"
+    package:    "github.com/c4s4/#{name}"
     version:    "0.1.0"
     bin_dir:    "bin"
     src_dir:    "src"
-    main:       "#{src_dir}/#{name}.go"
+    main:       "#{src_dir}/#{package}/#{name}.go"
     etc_dir:    "etc"
     etc_file:   "#{etc_dir}/#{name}.yml"
     args:       :etc_file
@@ -23,3 +24,4 @@
   description: Run gontinuum
   script:
   - "#{bin_dir}/#{name} #{args}"
+
