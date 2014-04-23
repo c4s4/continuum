@@ -1,23 +1,3 @@
-// Sample configuration file:
-//
-//   directory:  /home/casa/tmp
-//   email:
-//     smtp_host: smtp.orange.fr:25
-//     recipient: casa@sweetohm.net
-//     sender:    casa@sweetohm.net
-//     success:   true
-//
-//   modules:
-//     - name:    continuum
-//       url:     https://github.com/c4s4/continuum.git
-//       command: |
-//         set -e
-//         export PATH=/opt/python/current/bin:$PATH
-//         virtualenv env --no-site-packages
-//         . env/bin/activate
-//         pip install -r etc/requirements.txt
-//         bee test
-
 package main
 
 import (
@@ -32,6 +12,8 @@ import (
 	"strings"
 	"time"
 )
+
+const timeFormat = "2006-01-02 15:04"
 
 ///////////////////////////////////////////////////////////////////////////////
 //                              CONFIG STUFF                                 //
@@ -170,7 +152,9 @@ func buildModules(config Config) Builds {
 	return builds
 }
 
-const timeFormat = "2006-01-02 15:04"
+///////////////////////////////////////////////////////////////////////////////
+//                               EMAIL STUFF                                 //
+///////////////////////////////////////////////////////////////////////////////
 
 func sendEmail(builds Builds, start time.Time, duration time.Duration, config Config) {
 	if !builds.Success() || (builds.Success() && config.Email.Success) {
