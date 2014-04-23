@@ -177,9 +177,10 @@ func sendReport(builds Builds, start time.Time, duration time.Duration, config C
 				message += fmt.Sprintf(module)
 				message += fmt.Sprintf("\n-----------------------------------\n")
 				message += fmt.Sprintf(builds[module].Output)
-				message += fmt.Sprintf("\n-----------------------------------")
+				message += fmt.Sprintf("\n-----------------------------------\n")
 			}
 		}
+		message += "\n--\ngontinuum"
 		err := smtp.SendMail(config.Email.SmtpHost, nil, config.Email.Sender,
 			[]string{config.Email.Recipient}, []byte(message))
 		if err != nil {
