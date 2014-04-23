@@ -3,10 +3,14 @@ email:
   smtp_host: smtp.orange.fr:25
   recipient: casa@sweetohm.net
   sender:    casa@sweetohm.net
-  success:   false
+  success:   true
 
 modules:
-  continuum:
+  - name:    continuum
     url:     https://github.com/c4s4/continuum.git
+    command: |
+      echo "TEST"
+  - name:    gontinuum
+    url:     ssh://casa@sweetohm.net/home/git/gontinuum.git
     command: |
       echo "TEST"

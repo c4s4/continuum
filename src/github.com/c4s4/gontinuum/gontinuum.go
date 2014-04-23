@@ -8,7 +8,7 @@
 //     success:   true
 //
 //   modules:
-//     continuum:
+//     - name:    continuum
 //       url:     https://github.com/c4s4/continuum.git
 //       command: |
 //         set -e
@@ -41,7 +41,8 @@ type Config struct {
 		Sender    string
 		Success   bool
 	}
-	Modules map[string]struct {
+	Modules []struct {
+		Name    string
 		Url     string
 		Command string
 	}
@@ -61,11 +62,11 @@ func (build Build) String() string {
 	}
 }
 
-type Builds map[string]Build
+type Builds []Build
 
 func (builds Builds) Success() bool {
-	for module := range builds {
-		if !builds[module].Success {
+	for _, module := range builds {
+		if !module.Success {
 			return false
 		}
 	}
@@ -99,49 +100,49 @@ func loadConfig(file string) Config {
 	return config
 }
 
-func buildModule(module string, config Config) Build {
-	fmt.Printf("Building '%s'... ", module)
-	module_dir := path.Join(config.Directory, module)
+func buildModule(index int, config Config) Build {
+	fmt.Printf("Building '%s'... ", config.Modules[index].Name)
+	moduleDir := path.Join(config.Directory, config.Modules[index].Name)
 	// go in build directory
 	err := os.Chdir(config.Directory)
 	if err != nil {
 		return Build{
-			Module:  module,
+			Module:  config.Modules[index].Name,
 			Success: false,
 			Output:  err.Error(),
 		}
 	}
 	// delete module directory if it already exists
-	if _, err := os.Stat(module_dir); err == nil {
-		os.RemoveAll(module_dir)
+	if _, err := os.Stat(moduleDir); err == nil {
+		os.RemoveAll(moduleDir)
 	}
 	// git clone the module repository
-	cmd := exec.Command("git", "clone", config.Modules[module].Url)
+	cmd := exec.Command("git", "clone", config.Modules[index].Url)
 	output, err := cmd.CombinedOutput()
-	defer os.RemoveAll(module_dir)
+	defer os.RemoveAll(moduleDir)
 	if err != nil {
 		fmt.Println("ERROR")
 		return Build{
-			Module:  module,
+			Module:  config.Modules[index].Name,
 			Success: false,
 			Output:  string(output),
 		}
 	} else {
-		os.Chdir(module_dir)
+		os.Chdir(moduleDir)
 		// run the build command
-		cmd := exec.Command("bash", "-c", config.Modules[module].Command)
+		cmd := exec.Command("bash", "-c", config.Modules[index].Command)
 		output, err := cmd.CombinedOutput()
 		if err != nil {
 			fmt.Println("ERROR")
 			return Build{
-				Module:  module,
+				Module:  config.Modules[index].Name,
 				Success: false,
 				Output:  strings.TrimSpace(string(output)),
 			}
 		} else {
 			fmt.Println("OK")
 			return Build{
-				Module:  module,
+				Module:  config.Modules[index].Name,
 				Success: true,
 				Output:  string(output),
 			}
@@ -150,9 +151,9 @@ func buildModule(module string, config Config) Build {
 }
 
 func buildModules(config Config) Builds {
-	builds := make(Builds)
-	for module := range config.Modules {
-		builds[module] = buildModule(module, config)
+	builds := make(Builds, len(config.Modules))
+	for index, _ := range config.Modules {
+		builds[index] = buildModule(index, config)
 	}
 	return builds
 }
@@ -171,12 +172,12 @@ func sendReport(builds Builds, start time.Time, duration time.Duration, config C
 		}
 		message += fmt.Sprintf("\nDone in %s\n", duration)
 		message += builds.String()
-		for module := range builds {
-			if !builds[module].Success {
+		for _, build := range builds {
+			if !build.Success {
 				message += fmt.Sprintf("\n\n===================================\n")
-				message += fmt.Sprintf(module)
+				message += fmt.Sprintf(build.Module)
 				message += fmt.Sprintf("\n-----------------------------------\n")
-				message += fmt.Sprintf(builds[module].Output)
+				message += fmt.Sprintf(build.Output)
 				message += fmt.Sprintf("\n-----------------------------------\n")
 			}
 		}
