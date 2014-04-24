@@ -59,6 +59,14 @@ This script is triggered using cron, with as configuration as follows (in file *
   # run gontinuum at 4 every night
   0   4 * * *  me    gontinuum ~/etc/gontinuum.yml
 
+Todo
+====
+
+Here is a list of what is planned in the future:
+
+- Manage other SCM (such as SVN and CVS).
+- Implement conditional build (when project was modified).
+
 Releases
 ========
 
