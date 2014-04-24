@@ -65,7 +65,7 @@ func BuildModule(module ModuleConfig, directory string) Build {
 	if _, err := os.Stat(moduleDir); err == nil {
 		os.RemoveAll(moduleDir)
 	}
-	// git clone the module repository
+	// get the module
 	output, err := GetModule(module)
 	if err != nil {
 		fmt.Println("ERROR")
