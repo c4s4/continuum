@@ -1,6 +1,6 @@
 directory: /tmp
 email:
-  smtp_host: smtp.srvc.cvf:25
+  smtp_host: smtp.orange.fr:25
   recipient: casa@sweetohm.net
   sender:    casa@sweetohm.net
   success:   true

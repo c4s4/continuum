@@ -45,7 +45,9 @@ func BuildModule(module ModuleConfig, directory string) Build {
 	fmt.Printf("Building '%s'... ", module.Name)
 	moduleDir := path.Join(directory, module.Name)
 	// go in build directory
-	err := os.Chdir(directory)
+	currentDir, err := os.Getwd()
+	defer os.Chdir(currentDir)
+	err = os.Chdir(directory)
 	if err != nil {
 		return Build{
 			Module:  module,
@@ -60,7 +62,6 @@ func BuildModule(module ModuleConfig, directory string) Build {
 	// git clone the module repository
 	cmd := exec.Command("git", "clone", module.Url)
 	output, err := cmd.CombinedOutput()
-	defer os.RemoveAll(moduleDir)
 	if err != nil {
 		fmt.Println("ERROR")
 		return Build{
@@ -69,6 +70,7 @@ func BuildModule(module ModuleConfig, directory string) Build {
 			Output:  string(output),
 		}
 	} else {
+		defer os.RemoveAll(moduleDir)
 		os.Chdir(moduleDir)
 		// run the build command
 		cmd := exec.Command("bash", "-c", module.Command)
