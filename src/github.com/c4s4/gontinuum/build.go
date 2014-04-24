@@ -41,6 +41,12 @@ func (builds Builds) String() string {
 	}
 }
 
+func GetModule(module ModuleConfig) (string, error) {
+	cmd := exec.Command("git", "clone", module.Url)
+	output, err := cmd.CombinedOutput()
+	return string(output), err
+}
+
 func BuildModule(module ModuleConfig, directory string) Build {
 	fmt.Printf("Building '%s'... ", module.Name)
 	moduleDir := path.Join(directory, module.Name)
@@ -60,8 +66,7 @@ func BuildModule(module ModuleConfig, directory string) Build {
 		os.RemoveAll(moduleDir)
 	}
 	// git clone the module repository
-	cmd := exec.Command("git", "clone", module.Url)
-	output, err := cmd.CombinedOutput()
+	output, err := GetModule(module)
 	if err != nil {
 		fmt.Println("ERROR")
 		return Build{
