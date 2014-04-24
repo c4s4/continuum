@@ -21,7 +21,7 @@
   script:
   - print: "Building project #{name}..."
   - rm: "#{bin_dir}/#{name}"
-  - "go build -o #{bin_dir}/#{name} #{main}"
+  - "go build -o #{bin_dir}/#{name} #{src_dir}/#{package}/*.go"
 
 - target:      run
   depends:     bin
