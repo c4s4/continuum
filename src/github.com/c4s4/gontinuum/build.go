@@ -16,6 +16,7 @@ import (
 type Build struct {
 	Module  ModuleConfig
 	Success bool
+	Skipped bool
 	Output  string
 }
 
@@ -23,10 +24,14 @@ type Build struct {
 type Builds []Build
 
 func (build Build) String() string {
-	if build.Success {
-		return fmt.Sprintf("%s: OK", build.Module.Name)
+	if !build.Skipped {
+		if build.Success {
+			return "OK"
+		} else {
+			return "ERROR"
+		}
 	} else {
-		return fmt.Sprintf("%s: ERROR", build.Module.Name)
+		return "SKIPPED"
 	}
 }
 
@@ -56,7 +61,6 @@ func (builds Builds) String() string {
 // If build command returns 0 (as of Unix standard), the build is a success, else
 // this is a failure.
 func BuildModule(module ModuleConfig, directory string) Build {
-	fmt.Printf("Building '%s'... ", module.Name)
 	moduleDir := path.Join(directory, module.Name)
 	// go in build directory
 	currentDir, err := os.Getwd()
@@ -66,6 +70,7 @@ func BuildModule(module ModuleConfig, directory string) Build {
 		return Build{
 			Module:  module,
 			Success: false,
+			Skipped: false,
 			Output:  err.Error(),
 		}
 	}
@@ -76,10 +81,10 @@ func BuildModule(module ModuleConfig, directory string) Build {
 	// get the module
 	output, err := GetModule(module)
 	if err != nil {
-		fmt.Println("ERROR")
 		return Build{
 			Module:  module,
 			Success: false,
+			Skipped: false,
 			Output:  string(output),
 		}
 	} else {
@@ -89,17 +94,17 @@ func BuildModule(module ModuleConfig, directory string) Build {
 		cmd := exec.Command("bash", "-c", module.Command)
 		output, err := cmd.CombinedOutput()
 		if err != nil {
-			fmt.Println("ERROR")
 			return Build{
 				Module:  module,
 				Success: false,
+				Skipped: false,
 				Output:  strings.TrimSpace(string(output)),
 			}
 		} else {
-			fmt.Println("OK")
 			return Build{
 				Module:  module,
 				Success: true,
+				Skipped: false,
 				Output:  string(output),
 			}
 		}
@@ -110,12 +115,26 @@ func BuildModule(module ModuleConfig, directory string) Build {
 // order).
 func BuildModules(config Config) Builds {
 	builds := make(Builds, len(config.Modules))
-	repoStatus := LoadRepoHash(config.RepoStatus)
+	repoHash := LoadRepoHash(config.RepoHash)
 	for index, module := range config.Modules {
-		if repoStatus[module.Name] == "" ||
-			(repoStatus[module.Name] != GetRepoHash(module)) {
-			builds[index] = BuildModule(module, config.Directory)
+		fmt.Printf("Building '%s'... ", module.Name)
+		currentHash := GetRepoHash(module)
+		var build Build
+		if repoHash[module.Name] == "" ||
+			(repoHash[module.Name] != currentHash) {
+			build = BuildModule(module, config.Directory)
+		} else {
+			build = Build{
+				Module:  module,
+				Success: true,
+				Skipped: true,
+				Output:  "",
+			}
 		}
+		builds[index] = build
+		fmt.Println(build.String())
+		repoHash[module.Name] = currentHash
 	}
+	SaveRepoHash(repoHash, config.RepoHash)
 	return builds
 }

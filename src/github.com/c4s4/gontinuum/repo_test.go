@@ -42,14 +42,16 @@ func TestLoadRepoHash(t *testing.T) {
 	}
 }
 
+const TestRepoHashFile = "/tmp/test-repo-hash.yml"
+
 func TestSaveRepoHash(t *testing.T) {
 	repoHash := RepoHash{
 		"module1": "dbe955d1d83ea4ec969656d1e002e25ca1382fd8",
 		"module2": "c634c54781a89253167076ce102e588af8a60141",
 	}
-	SaveRepoHash(repoHash, "/tmp/repo-hash.yml")
-	defer os.Remove("/tmp/repo-hash.yml")
-	actual, _ := ioutil.ReadFile("/tmp/repo-hash.yml")
+	SaveRepoHash(repoHash, TestRepoHashFile)
+	defer os.Remove(TestRepoHashFile)
+	actual, _ := ioutil.ReadFile(TestRepoHashFile)
 	if string(actual) != testRepoHash {
 		t.Error("Error writing repo file")
 	}

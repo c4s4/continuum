@@ -22,7 +22,7 @@ func SendEmail(builds Builds, start time.Time, duration time.Duration, email Ema
 		message += fmt.Sprintf("Subject: %s\n\n", subject)
 		message += fmt.Sprintf("Build on %s:\n\n", start.Format(timeFormat))
 		for _, build := range builds {
-			message += fmt.Sprintf("  %s\n", build.String())
+			message += fmt.Sprintf("  %s: %s\n", build.Module.Name, build.String())
 		}
 		message += fmt.Sprintf("\nDone in %s\n", duration)
 		message += builds.String()

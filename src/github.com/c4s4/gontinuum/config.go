@@ -45,10 +45,10 @@ type ModuleConfig struct {
 
 // Config is the global configuration of the application.
 type Config struct {
-	Directory  string
-	RepoStatus string "repo_status"
-	Email      EmailConfig
-	Modules    []ModuleConfig
+	Directory string
+	RepoHash  string "repo_status"
+	Email     EmailConfig
+	Modules   []ModuleConfig
 }
 
 // LoadConfig loads configuration from a given YAML configuration file.
