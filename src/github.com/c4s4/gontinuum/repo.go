@@ -24,14 +24,17 @@ import (
 	"strings"
 )
 
+// RepoHash is a map that gives hash of the HEAD for a given repo.
 type RepoHash map[string]string
 
+// GetModule clones a given module repository in current directory.
 func GetModule(module ModuleConfig) (string, error) {
 	cmd := exec.Command("git", "clone", module.Url)
 	output, err := cmd.CombinedOutput()
 	return string(output), err
 }
 
+// GetRepoHash return the hash of the HEAD for a given repository.
 func GetRepoHash(module ModuleConfig) string {
 	cmd := exec.Command("git", "ls-remote", module.Url)
 	output, err := cmd.CombinedOutput()
@@ -49,6 +52,7 @@ func GetRepoHash(module ModuleConfig) string {
 	return ""
 }
 
+// LoadRepoHash loads the repo hash in a given file.
 func LoadRepoHash(file string) RepoHash {
 	if file != "" {
 		repoStatus := RepoHash{}
@@ -60,6 +64,7 @@ func LoadRepoHash(file string) RepoHash {
 	}
 }
 
+// SaveRepoHash saves the repo hash in a given file.
 func SaveRepoHash(repoHash RepoHash, file string) {
 	contents, err := yaml.Marshal(repoHash)
 	if err != nil {
