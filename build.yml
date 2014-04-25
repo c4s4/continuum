@@ -35,6 +35,11 @@
   script:
   - "go test #{package}"
 
+- target:      doc
+  description: Generate code documentation
+  script:
+  - "godoc #{package}"
+
 - target:      virtualenv
   description: Check that we are running in virtualenv
   script:
