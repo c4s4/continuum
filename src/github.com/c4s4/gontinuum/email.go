@@ -1,13 +1,19 @@
 package main
 
+/*
+ * Email stuff to send reports by mail.
+ */
+
 import (
 	"fmt"
 	"net/smtp"
 	"time"
 )
 
+// timeFormat is the format for the date-time that appears in mails.
 const timeFormat = "2006-01-02 15:04"
 
+// SendEmail sends the report email after the build.
 func SendEmail(builds Builds, start time.Time, duration time.Duration, email EmailConfig) {
 	if !builds.Success() || (builds.Success() && email.Success) {
 		subject := fmt.Sprintf("Build on %s was a %s", start.Format(timeFormat), builds)

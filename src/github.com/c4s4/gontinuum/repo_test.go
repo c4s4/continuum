@@ -48,7 +48,7 @@ func TestSaveRepoHash(t *testing.T) {
 		"module2": "c634c54781a89253167076ce102e588af8a60141",
 	}
 	SaveRepoHash(repoHash, "/tmp/repo-hash.yml")
-	//defer os.Remove("/tmp/repo-hash.yml")
+	defer os.Remove("/tmp/repo-hash.yml")
 	actual, _ := ioutil.ReadFile("/tmp/repo-hash.yml")
 	if string(actual) != testRepoHash {
 		t.Error("Error writing repo file")
