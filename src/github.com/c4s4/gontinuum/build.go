@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v1"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
+	"regexp"
 	"strings"
 )
 
@@ -15,6 +18,8 @@ type Build struct {
 }
 
 type Builds []Build
+
+type RepoStatus map[string]string
 
 func (build Build) String() string {
 	if build.Success {
@@ -39,12 +44,6 @@ func (builds Builds) String() string {
 	} else {
 		return "FAILURE"
 	}
-}
-
-func GetModule(module ModuleConfig) (string, error) {
-	cmd := exec.Command("git", "clone", module.Url)
-	output, err := cmd.CombinedOutput()
-	return string(output), err
 }
 
 func BuildModule(module ModuleConfig, directory string) Build {
@@ -100,8 +99,46 @@ func BuildModule(module ModuleConfig, directory string) Build {
 
 func BuildModules(config Config) Builds {
 	builds := make(Builds, len(config.Modules))
+	repoStatus := LoadRepoStatus(config.RepoStatus)
 	for index, module := range config.Modules {
-		builds[index] = BuildModule(module, config.Directory)
+		if repoStatus[module.Name] == "" ||
+			(repoStatus[module.Name] != GetRepoStatus(module)) {
+			builds[index] = BuildModule(module, config.Directory)
+		}
 	}
 	return builds
+}
+
+func GetModule(module ModuleConfig) (string, error) {
+	cmd := exec.Command("git", "clone", module.Url)
+	output, err := cmd.CombinedOutput()
+	return string(output), err
+}
+
+func GetRepoStatus(module ModuleConfig) string {
+	cmd := exec.Command("git", "ls-remote", module.Url)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return ""
+	}
+	lines := strings.Split(string(output), "\n")
+	for _, line := range lines {
+		re, _ := regexp.Compile("(\\w+)\\s+HEAD")
+		match := re.FindStringSubmatch(line)
+		if len(match) > 0 {
+			return match[1]
+		}
+	}
+	return ""
+}
+
+func LoadRepoStatus(file string) RepoStatus {
+	if file != "" {
+		repoStatus := RepoStatus{}
+		text, _ := ioutil.ReadFile(file)
+		yaml.Unmarshal(text, &repoStatus)
+		return repoStatus
+	} else {
+		return make(RepoStatus)
+	}
 }

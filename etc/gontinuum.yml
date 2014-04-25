@@ -1,4 +1,5 @@
-directory: /tmp
+directory:   /tmp
+repo_status: /tmp/repo-status.yml
 email:
   smtp_host: smtp.orange.fr:25
   recipient: casa@sweetohm.net

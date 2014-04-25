@@ -20,9 +20,10 @@ type ModuleConfig struct {
 }
 
 type Config struct {
-	Directory string
-	Email     EmailConfig
-	Modules   []ModuleConfig
+	Directory  string
+	RepoStatus string "repo_status"
+	Email      EmailConfig
+	Modules    []ModuleConfig
 }
 
 func LoadConfig(file string) Config {
