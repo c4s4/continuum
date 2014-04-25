@@ -29,9 +29,23 @@
   script:
   - "#{bin_dir}/#{name} #{args}"
 
+- target:      test
+  depends:     virtualenv
+  description: Run unit tests
+  script:
+  - "go test #{package}"
+
+- target:      virtualenv
+  description: Check that we are running in virtualenv
+  script:
+  - if: "ENV['VIRTUAL_ENV'] != base"
+    then:
+    - raise: "You are not running in the project's Virtualenv, aborting"
+    else:
+    - print: "You are running in the project's Virtualenv, please proceed"
+
 - target:      clean
   description: Clean generated files
   script:
   - rmdir: :clean_dirs
   - rm:    :clean_files
-  
