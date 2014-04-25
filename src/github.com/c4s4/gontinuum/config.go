@@ -5,7 +5,7 @@ package main
  * configuration file:
  *
  *   directory:   /tmp
- *   repo_status: /tmp/repo-status.yml
+ *   repo_hash:   /tmp/repo-status.yml
  *   email:
  *     smtp_host: smtp.orange.fr:25
  *     recipient: casa@sweetohm.net
@@ -46,7 +46,7 @@ type ModuleConfig struct {
 // Config is the global configuration of the application.
 type Config struct {
 	Directory string
-	RepoHash  string "repo_status"
+	RepoHash  string "repo_hash"
 	Email     EmailConfig
 	Modules   []ModuleConfig
 }
