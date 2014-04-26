@@ -24,11 +24,11 @@ import (
 	"strings"
 )
 
-// RepoHash is a map that gives hash of the HEAD for a given repo.
-type RepoHash map[string]string
+// RepoHashMap is a map that gives hash of the HEAD for a given repo.
+type RepoHashMap map[string]string
 
-// GetModule clones a given module repository in current directory.
-func GetModule(module ModuleConfig) (string, error) {
+// CloneRepo clones a given module repository in current directory.
+func CloneRepo(module ModuleConfig) (string, error) {
 	cmd := exec.Command("git", "clone", module.Url)
 	output, err := cmd.CombinedOutput()
 	return string(output), err
@@ -52,23 +52,25 @@ func GetRepoHash(module ModuleConfig) string {
 	return ""
 }
 
-// LoadRepoHash loads the repo hash in a given file.
-func LoadRepoHash(file string) RepoHash {
+// LoadRepoHashMap loads the repo hash map in a given file.
+func LoadRepoHashMap(file string) RepoHashMap {
 	if file != "" {
-		repoStatus := RepoHash{}
+		repoStatus := RepoHashMap{}
 		text, _ := ioutil.ReadFile(file)
 		yaml.Unmarshal(text, &repoStatus)
 		return repoStatus
 	} else {
-		return make(RepoHash)
+		return make(RepoHashMap)
 	}
 }
 
-// SaveRepoHash saves the repo hash in a given file.
-func SaveRepoHash(repoHash RepoHash, file string) {
-	contents, err := yaml.Marshal(repoHash)
+// SaveRepoHashMap saves the repo hash in a given file.
+func SaveRepoHashMap(repoHashMap RepoHashMap, file string) {
+	contents, err := yaml.Marshal(repoHashMap)
 	if err != nil {
-		panic("Error writing repo hash file: " + err.Error())
+		panic("Error writing repo hash map file: " + err.Error())
 	}
-	ioutil.WriteFile(file, contents, 0644)
+	if err := ioutil.WriteFile(file, contents, 0644); err != nil {
+		panic("Error writing repo hash map file: " + err.Error())
+	}
 }

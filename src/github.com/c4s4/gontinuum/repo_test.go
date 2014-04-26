@@ -14,31 +14,31 @@ func TestGetRepoHash(t *testing.T) {
 		Url:     "ssh://casa@sweetohm.net/home/git/gontinuum.git",
 		Command: "echo 'TEST'",
 	}
-	hash := GetRepoHash(moduleConfig)
-	if match, _ := regexp.MatchString("^[0-9a-f]{40}$", hash); match != true {
-		t.Errorf("GetRepoStatus() response '%s' doesn't look like a hash", hash)
+	repoHash := GetRepoHash(moduleConfig)
+	if match, _ := regexp.MatchString("^[0-9a-f]{40}$", repoHash); match != true {
+		t.Errorf("GetRepoStatus() response '%s' doesn't look like a hash", repoHash)
 	}
 }
 
-const testRepoHash = `module1: dbe955d1d83ea4ec969656d1e002e25ca1382fd8
+const testRepoHashMap = `module1: dbe955d1d83ea4ec969656d1e002e25ca1382fd8
 module2: c634c54781a89253167076ce102e588af8a60141
 `
 
-func TestLoadRepoHash(t *testing.T) {
+func TestLoadRepoHashMap(t *testing.T) {
 	tempFile, err := ioutil.TempFile("/tmp", "go-test-")
 	if err != nil {
 		panic(errors.New("Could not open temp file"))
 	}
-	_, err = tempFile.WriteString(testRepoHash)
+	_, err = tempFile.WriteString(testRepoHashMap)
 	if err != nil {
 		panic(errors.New("Could not write temp file"))
 	}
 	defer os.Remove(tempFile.Name())
-	repoHash := LoadRepoHash(tempFile.Name())
-	if repoHash["module1"] != "dbe955d1d83ea4ec969656d1e002e25ca1382fd8" {
+	repoHashMap := LoadRepoHashMap(tempFile.Name())
+	if repoHashMap["module1"] != "dbe955d1d83ea4ec969656d1e002e25ca1382fd8" {
 		t.Error("Bad repo hash")
 	}
-	if repoHash["module2"] != "c634c54781a89253167076ce102e588af8a60141" {
+	if repoHashMap["module2"] != "c634c54781a89253167076ce102e588af8a60141" {
 		t.Error("Bad repo hash")
 	}
 }
@@ -46,14 +46,14 @@ func TestLoadRepoHash(t *testing.T) {
 const TestRepoHashFile = "/tmp/test-repo-hash.yml"
 
 func TestSaveRepoHash(t *testing.T) {
-	repoHash := RepoHash{
+	repoHashMap := RepoHashMap{
 		"module1": "dbe955d1d83ea4ec969656d1e002e25ca1382fd8",
 		"module2": "c634c54781a89253167076ce102e588af8a60141",
 	}
-	SaveRepoHash(repoHash, TestRepoHashFile)
+	SaveRepoHashMap(repoHashMap, TestRepoHashFile)
 	defer os.Remove(TestRepoHashFile)
 	actual, _ := ioutil.ReadFile(TestRepoHashFile)
-	if string(actual) != testRepoHash {
+	if string(actual) != testRepoHashMap {
 		t.Error("Error writing repo file")
 	}
 }

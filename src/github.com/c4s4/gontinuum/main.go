@@ -5,7 +5,7 @@ package main
  * format:
  *
  *   directory:   /tmp
- *   repo_status: /tmp/repo-status.yml
+ *   repo_hash:   /tmp/repo-hash.yml
  *   email:
  *     smtp_host: smtp.orange.fr:25
  *     recipient: casa@sweetohm.net

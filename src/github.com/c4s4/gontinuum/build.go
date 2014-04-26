@@ -79,7 +79,7 @@ func BuildModule(module ModuleConfig, directory string) Build {
 		os.RemoveAll(moduleDir)
 	}
 	// get the module
-	output, err := GetModule(module)
+	output, err := CloneRepo(module)
 	if err != nil {
 		return Build{
 			Module:  module,
@@ -115,13 +115,13 @@ func BuildModule(module ModuleConfig, directory string) Build {
 // order).
 func BuildModules(config Config) Builds {
 	builds := make(Builds, len(config.Modules))
-	repoHash := LoadRepoHash(config.RepoHash)
+	repoHashMap := LoadRepoHashMap(config.RepoHash)
 	for index, module := range config.Modules {
 		fmt.Printf("Building '%s'... ", module.Name)
-		currentHash := GetRepoHash(module)
+		repoHash := GetRepoHash(module)
 		var build Build
-		if repoHash[module.Name] == "" ||
-			(repoHash[module.Name] != currentHash) {
+		if repoHashMap[module.Name] == "" ||
+			(repoHashMap[module.Name] != repoHash) {
 			build = BuildModule(module, config.Directory)
 		} else {
 			build = Build{
@@ -134,11 +134,11 @@ func BuildModules(config Config) Builds {
 		builds[index] = build
 		fmt.Println(build.String())
 		if build.Success {
-			repoHash[module.Name] = currentHash
+			repoHashMap[module.Name] = repoHash
 		} else {
-			repoHash[module.Name] = "ERROR"
+			repoHashMap[module.Name] = "ERROR"
 		}
 	}
-	SaveRepoHash(repoHash, config.RepoHash)
+	SaveRepoHashMap(repoHashMap, config.RepoHash)
 	return builds
 }
