@@ -20,8 +20,9 @@ func TestGetRepoHash(t *testing.T) {
 	}
 }
 
-const testRepoHash = "module1: dbe955d1d83ea4ec969656d1e002e25ca1382fd8\n" +
-	"module2: c634c54781a89253167076ce102e588af8a60141\n"
+const testRepoHash = `module1: dbe955d1d83ea4ec969656d1e002e25ca1382fd8
+module2: c634c54781a89253167076ce102e588af8a60141
+`
 
 func TestLoadRepoHash(t *testing.T) {
 	tempFile, err := ioutil.TempFile("/tmp", "go-test-")

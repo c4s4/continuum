@@ -32,22 +32,27 @@ func TestSubjectFailure(t *testing.T) {
 }
 
 func TestMessage(t *testing.T) {
-	expected := "From: from\n" +
-		"To: to\n" +
-		"Subject: subject\n\n" +
-		"Build on 2001-02-03 12:34:\n\n" +
-		"  foo: OK\n" +
-		"  bar: ERROR\n" +
-		"  baz: SKIPPED\n\n" +
-		"Done in 1m2s\n" +
-		"FAILURE\n\n" +
-		"===================================\n" +
-		"bar\n" +
-		"-----------------------------------\n" +
-		"Argh!\n" +
-		"-----------------------------------\n\n" +
-		"--\n" +
-		"gontinuum"
+	expected := `From: from
+To: to
+Subject: subject
+
+Build on 2001-02-03 12:34:
+
+  foo: OK
+  bar: ERROR
+  baz: SKIPPED
+
+Done in 1m2s
+FAILURE
+
+===================================
+bar
+-----------------------------------
+Argh!
+-----------------------------------
+
+--
+gontinuum`
 	builds := []Build{
 		Build{Module: ModuleConfig{Name: "foo"}, Success: true, Skipped: false},
 		Build{Module: ModuleConfig{Name: "bar"}, Success: false, Skipped: false, Output: "Argh!"},
