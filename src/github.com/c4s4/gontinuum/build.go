@@ -133,7 +133,11 @@ func BuildModules(config Config) Builds {
 		}
 		builds[index] = build
 		fmt.Println(build.String())
-		repoHash[module.Name] = currentHash
+		if build.Success {
+			repoHash[module.Name] = currentHash
+		} else {
+			repoHash[module.Name] = "ERROR"
+		}
 	}
 	SaveRepoHash(repoHash, config.RepoHash)
 	return builds
