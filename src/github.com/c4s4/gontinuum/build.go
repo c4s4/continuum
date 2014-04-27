@@ -1,8 +1,8 @@
-package main
-
 /*
  * Build management stuff. This is used to build modules.
  */
+
+package main
 
 import (
 	"fmt"

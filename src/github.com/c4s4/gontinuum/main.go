@@ -1,8 +1,8 @@
-package main
-
 /*
  * Main file for Gontinuum.
  */
+
+package main
 
 import (
 	"fmt"

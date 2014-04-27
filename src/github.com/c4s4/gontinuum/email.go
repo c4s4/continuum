@@ -1,8 +1,8 @@
-package main
-
 /*
  * Email stuff to send reports by mail.
  */
+
+package main
 
 import (
 	"fmt"

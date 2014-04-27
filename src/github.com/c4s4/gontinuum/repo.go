@@ -1,5 +1,3 @@
-package main
-
 /*
  * Repository management stuff. Reads and writes a repository hash file that
  * holds the SHA1 for each module. This file is in YAML format and looks like:
@@ -15,6 +13,8 @@ package main
  *
  * We take hash for HEAD.
  */
+
+package main
 
 import (
 	"gopkg.in/yaml.v1"

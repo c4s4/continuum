@@ -1,5 +1,3 @@
-package main
-
 /*
  * Configuration management stuff. This configuration is built from YAML
  * configuration file:
@@ -22,6 +20,8 @@ package main
  *     command: |
  *       command to run tests
  */
+
+package main
 
 import (
 	"gopkg.in/yaml.v1"
