@@ -101,11 +101,15 @@ func CheckArguments() string {
 func main() {
 	configFile := CheckArguments()
 	config := LoadConfig(configFile)
-	Highlander(config.Port)
-	start := time.Now()
-	builds := BuildModules(config)
-	duration := time.Since(start)
-	fmt.Println("Done in", duration)
-	fmt.Println(builds.String())
-	SendEmail(builds, start, duration, config.Email)
+	if IsAnotherInstanceRunning(config.Port) {
+		fmt.Println("Another instance is already running, aborting")
+		os.Exit(0)
+	} else {
+		start := time.Now()
+		builds := BuildModules(config)
+		duration := time.Since(start)
+		fmt.Println("Done in", duration)
+		fmt.Println(builds.String())
+		SendEmail(builds, start, duration, config.Email)
+	}
 }
