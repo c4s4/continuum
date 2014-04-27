@@ -1,5 +1,6 @@
 directory:   /tmp
 repo_hash:   /tmp/repo-hash.yml
+port:        6666
 email:
   smtp_host: smtp.orange.fr:25
   #smtp_host: smtp.srvc.cvf:25

@@ -6,6 +6,7 @@ package main
  *
  *   directory:   /tmp
  *   repo_hash:   /tmp/repo-status.yml
+ *   port:        6666
  *   email:
  *     smtp_host: smtp.orange.fr:25
  *     recipient: casa@sweetohm.net
@@ -47,6 +48,7 @@ type ModuleConfig struct {
 type Config struct {
 	Directory string
 	RepoHash  string "repo_hash"
+	Port      int
 	Email     EmailConfig
 	Modules   []ModuleConfig
 }
