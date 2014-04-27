@@ -7,7 +7,6 @@ email:
   recipient: casa@sweetohm.net
   sender:    casa@sweetohm.net
   success:   true
-
 modules:
   - name:    continuum
     url:     https://github.com/c4s4/continuum.git
