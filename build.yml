@@ -35,6 +35,14 @@
   script:
   - "go test #{package}"
 
+- target:      cover
+  description: Generate coverage report
+  script:
+  - mkdir: :build_dir
+  - "go test -coverprofile=#{build_dir}/coverage.out #{package}"
+  - "go tool cover -html=#{build_dir}/coverage.out -o #{build_dir}/coverage.html"
+  - print: "Test coverage report generated in file '#{build_dir}/coverage.html'"
+
 - target:      doc
   description: Generate code documentation
   script:
