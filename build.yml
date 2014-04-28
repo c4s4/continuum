@@ -13,6 +13,11 @@
     etc_dir:     "etc"
     etc_file:    "#{etc_dir}/#{name}.yml"
     args:        :etc_file
+    # test coverage mode:
+    # - set: indicates which statement was run
+    # - count: counts the numbers of runs on a statement
+    # - atomic: precise count (for parallel algorithms)
+    cover_mode:  "set"
     clean_dirs:  :build_dir
     clean_files: ["#{bin_dir}/#{name}"]
 
@@ -39,8 +44,9 @@
   description: Generate coverage report
   script:
   - mkdir: :build_dir
-  - "go test -coverprofile=#{build_dir}/coverage.out #{package}"
+  - "go test -covermode=#{cover_mode} -coverprofile=#{build_dir}/coverage.out #{package}"
   - "go tool cover -html=#{build_dir}/coverage.out -o #{build_dir}/coverage.html"
+  - "go tool cover -func=#{build_dir}/coverage.out"
   - print: "Test coverage report generated in file '#{build_dir}/coverage.html'"
 
 - target:      doc
