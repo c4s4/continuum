@@ -37,6 +37,8 @@ Configuration is in YAML format::
 The first part indicates:
 
 - directory: the directory where modules will be checked out. Currently only GIT projects are supported.
+- repo_hash: this is the name of the file were are stored repositories hash (to determine if they changed since last run).
+- port: the port that gontinuum listens to ensure that only one instance is running at a time. This port should be free on the host machine.
 - email: put *~* if you don't want any email.
 
 If you wait to receive email reports, provide following fields:
@@ -52,6 +54,12 @@ The second one is the list of modules, with, for each module:
 - url: the URL of the module that GIT will use to get the sources.
 - command: the command to run tests, must return 0 on success and a different value on error (as any Unix script should).
 
+You can pass the configuration file to use on command line. If you pass no configuration file on command line, gontinuum will look for following files to use:
+
+- ~/.gontinuum.yml
+- ~/etc/gontinuum.yml
+- /etc/gontinumm.yml
+
 Crontab
 =======
 
@@ -66,7 +74,6 @@ Todo
 Here is a list of what is planned in the future:
 
 - Manage other SCM (such as SVN and CVS).
-- Implement conditional build (when project was modified).
 
 Releases
 ========
