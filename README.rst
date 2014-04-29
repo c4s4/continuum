@@ -7,7 +7,7 @@ Gontinuum is a lightweight continuous integration tool: no web interface, no sch
 Installation
 ============
 
-
+TBD.
 
 Configuration
 =============
@@ -65,8 +65,13 @@ Crontab
 
 This script is triggered using cron, with as configuration as follows (in file */etc/crontab*)::
 
-  # run gontinuum at 4 every night
-  0   4 * * *  me    gontinuum
+  0   * * * *  me    gontinuum
+
+This will run gontinuum every hour. When gontinuum starts, it checks if repository has changed for all modules, comparing its hash with the one stored in *repo_hash* file.
+
+If repository has changed, gontinuum clones it and runs command for tests. If commands return 0 (which is the Unix standard to tell that a command was successful), the test is OK, else it is a failure.
+
+Gontinuum prints a summary of the tests results and sends an email if one test failed. It also sends a report if no test failed and *success* configuration field was set to *true*.
 
 Todo
 ====
