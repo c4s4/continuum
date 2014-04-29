@@ -11,7 +11,7 @@ import (
 func TestGetRepoHash(t *testing.T) {
 	moduleConfig := ModuleConfig{
 		Name:    "test",
-		Url:     "ssh://casa@sweetohm.net/home/git/gontinuum.git",
+		Url:     "https://github.com/c4s4/gontinuum.git",
 		Command: "echo 'TEST'",
 	}
 	repoHash := GetRepoHash(moduleConfig)
