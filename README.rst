@@ -14,13 +14,14 @@ Configuration
 
 Configuration is in YAML format::
 
-  directory:  /tmp
+  directory:   /tmp
+  repo_hash:   /tmp/repo-hash.yml
+  port:        6666
   email:
     smtp_host: smtp.foo.com:25
     recipient: foo@bar.com
     sender:    foo@bar.com
     success:   false
-  
   modules:
     - name:    module1
       url:     https://github.com/user/module1.git
@@ -29,7 +30,7 @@ Configuration is in YAML format::
         commands to run tests
     - name:    module2
       url:     https://github.com/user/module2.git
-      command:
+      command: |
         set -e
         commands to run tests
 
@@ -57,7 +58,7 @@ Crontab
 This script is triggered using cron, with as configuration as follows (in file */etc/crontab*)::
 
   # run gontinuum at 4 every night
-  0   4 * * *  me    gontinuum ~/etc/gontinuum.yml
+  0   4 * * *  me    gontinuum
 
 Todo
 ====
