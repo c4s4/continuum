@@ -1,16 +1,16 @@
-=========
 GONTINUUM
 =========
 
-Gontinuum is a lightweight continuous integration tool: no web interface, no scheduler. It runs on command line and is triggered by cron.
+Gontinuum is a lightweight continuous integration tool: no web interface, no
+scheduler. It runs on command line and is triggered by cron.
 
 Installation
-============
+------------
 
-TBD.
+Drop executable *gontinuum* somewhere in you *PATH*. 
 
 Configuration
-=============
+-------------
 
 Configuration is in YAML format::
 
@@ -61,7 +61,7 @@ You can pass the configuration file to use on command line. If you pass no confi
 - /etc/gontinumm.yml
 
 Crontab
-=======
+-------
 
 This script is triggered using cron, with as configuration as follows (in file */etc/crontab*)::
 
@@ -73,17 +73,4 @@ If repository has changed, gontinuum clones it and runs command for tests. If co
 
 Gontinuum prints a summary of the tests results and sends an email if one test failed. It also sends a report if no test failed and *success* configuration field was set to *true*.
 
-Todo
-====
-
-Here is a list of what is planned in the future:
-
-- Manage other SCM (such as SVN and CVS).
-
-Releases
-========
-
-- **0.1.0** (*2014-04-??*): First public release.
-
 Enjoy!
-
