@@ -12,27 +12,27 @@ Drop executable *gontinuum* somewhere in you *PATH*.
 Configuration
 -------------
 
-Configuration is in YAML format::
+Configuration is in YAML format:
 
-  directory:   /tmp
-  repo_hash:   /tmp/repo-hash.yml
-  port:        6666
-  email:
-    smtp_host: smtp.foo.com:25
-    recipient: foo@bar.com
-    sender:    foo@bar.com
-    success:   false
-  modules:
-    - name:    module1
-      url:     https://github.com/user/module1.git
-      command: |
-        set -e
-        commands to run tests
-    - name:    module2
-      url:     https://github.com/user/module2.git
-      command: |
-        set -e
-        commands to run tests
+    directory:   /tmp
+    repo_hash:   /tmp/repo-hash.yml
+    port:        6666
+    email:
+      smtp_host: smtp.foo.com:25
+      recipient: foo@bar.com
+      sender:    foo@bar.com
+      success:   false
+    modules:
+      - name:    module1
+        url:     https://github.com/user/module1.git
+        command: |
+          set -e
+          commands to run tests
+      - name:    module2
+        url:     https://github.com/user/module2.git
+        command: |
+          set -e
+          commands to run tests
 
 The first part indicates:
 
@@ -65,7 +65,7 @@ Crontab
 
 This script is triggered using cron, with as configuration as follows (in file */etc/crontab*)::
 
-  0   * * * *  me    gontinuum
+    0   * * * *  me    gontinuum
 
 This will run gontinuum every hour. When gontinuum starts, it checks if repository has changed for all modules, comparing its hash with the one stored in *repo_hash* file.
 
