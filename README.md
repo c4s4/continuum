@@ -7,8 +7,9 @@ scheduler. It runs on command line and is triggered by cron.
 Installation
 ------------
 
-Drop executable *gontinuum* somewhere in you *PATH* (in */usr/local/bin/* for
-instance). 
+Drop your platform executable *gontinuum_os_arch* (in the *bin* directory of
+the distribution archive) somewhere in you *PATH* (in */usr/local/bin/* for
+instance) and rename it *gontinuum*.
 
 Configuration
 -------------
