@@ -13,10 +13,12 @@
  *   modules:
  *   - name:    module1
  *     url:     https://repository/url/module1.git
+ *     branch:  branch1
  *     command: |
  *       command to run tests
  *   - name:    module2
  *     url:     https://repository/url/module2.git
+ *     branch:  branch2
  *     command: |
  *       command to run tests
  */
@@ -41,6 +43,7 @@ type EmailConfig struct {
 type ModuleConfig struct {
 	Name    string
 	Url     string
+	Branch  string
 	Command string
 }
 

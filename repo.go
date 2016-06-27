@@ -29,12 +29,12 @@ type RepoHashMap map[string]string
 
 // CloneRepo clones a given module repository in current directory.
 func CloneRepo(module ModuleConfig) (string, error) {
-	cmd := exec.Command("git", "clone", module.Url)
+	cmd := exec.Command("git", "clone", "-b", module.Branch, module.Url)
 	output, err := cmd.CombinedOutput()
 	return string(output), err
 }
 
-// GetRepoHash return the hash of the HEAD for a given repository.
+// GetRepoHash return the hash of the branch for a given repository.
 func GetRepoHash(module ModuleConfig) string {
 	cmd := exec.Command("git", "ls-remote", module.Url)
 	output, err := cmd.CombinedOutput()
@@ -43,7 +43,7 @@ func GetRepoHash(module ModuleConfig) string {
 	}
 	lines := strings.Split(string(output), "\n")
 	for _, line := range lines {
-		re, _ := regexp.Compile("(\\w+)\\s+HEAD")
+		re, _ := regexp.Compile("(\\w+)\\s+/?refs/heads/" + module.Branch)
 		match := re.FindStringSubmatch(line)
 		if len(match) > 0 {
 			return match[1]
