@@ -22,7 +22,11 @@ deps:
 	go get gopkg.in/yaml.v1
 	go get github.com/mitchellh/gox
 
-build: clean
+test:
+	@echo "$(YELLOW)Running tests$(CLEAR)"
+	go test
+
+build: clean test
 	@echo "$(YELLOW)Building application$(CLEAR)"
 	mkdir -p $(BUILD_DIR)
 	go build -o $(BUILD_DIR)/$(NAME)
