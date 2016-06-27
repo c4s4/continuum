@@ -43,7 +43,7 @@ func GetRepoHash(module ModuleConfig) string {
 	}
 	lines := strings.Split(string(output), "\n")
 	for _, line := range lines {
-		re, _ := regexp.Compile("(\\w+)\\s+/refs/heads/" + module.Branch)
+		re, _ := regexp.Compile("(\\w+)\\s+/?refs/heads/" + module.Branch)
 		match := re.FindStringSubmatch(line)
 		if len(match) > 0 {
 			return match[1]
