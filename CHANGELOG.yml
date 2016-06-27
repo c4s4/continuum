@@ -1,3 +1,9 @@
+- version: 0.?.?
+  date:    ????-??-??
+  summary: ???
+  added:
+  - "Print start time on the console."
+
 - version: 0.2.0
   date:    2016-06-27
   summary: Added branch in project configuration
