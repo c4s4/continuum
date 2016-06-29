@@ -4,7 +4,7 @@
   added:
   - "Print start time on the console."
   fixed:
-  - "Clone module into directory with module name".
+  - "Clone module into directory with module name."
 
 - version: 0.2.0
   date:    2016-06-27
