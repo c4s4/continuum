@@ -1,10 +1,10 @@
-- version: 0.?.?
-  date:    ????-??-??
-  summary: ???
+- version: 0.3.0
+  date:    2016-06-29
+  summary: Minor improvements and bug fixes
   added:
   - "Print start time on the console."
   fixed:
-  - "Clone module into directory of its name".
+  - "Clone module into directory with module name".
 
 - version: 0.2.0
   date:    2016-06-27
