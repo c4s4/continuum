@@ -29,7 +29,7 @@ type RepoHashMap map[string]string
 
 // CloneRepo clones a given module repository in current directory.
 func CloneRepo(module ModuleConfig) (string, error) {
-	cmd := exec.Command("git", "clone", "-b", module.Branch, module.Url)
+	cmd := exec.Command("git", "clone", "-b", module.Branch, module.Url, module.Name)
 	output, err := cmd.CombinedOutput()
 	return string(output), err
 }

@@ -19,26 +19,30 @@ Where configuration.yml is as follows:
   repo_hash:   /tmp/repo-hash.yml
   port:        6666
   email:
-    smtp_host: smtp.orange.fr:25
-    recipient: casa@sweetohm.net
-    sender:    casa@sweetohm.net
+    smtp_host: smtp.foo.com:25
+    recipient: somebody@somewhere.net
+    sender:    somebody@somewhere.net
     success:   true
   modules:
-  - name:    module1
-    url:     https://repository/url/module1.git
-    command: |
-      command to run tests
-  - name:    module2
-    url:     https://repository/url/module2.git
-    command: |
-      command to run tests
+    - name:    continuum
+      url:     https://github.com/c4s4/continuum.git
+      branch:  develop
+      command: |
+        set -e
+        commands to run tests
+    - name:    gontinuum
+      url:     ssh://casa@sweetohm.net/home/git/gontinuum.git
+      branch:  master
+      command: |
+        set -e
+        commands to run tests
 
 If configuration file is not passed on command line, it will be searched at
 following locations:
+
 - ~/.gontinuum.yml
 - ~/etc/gontinuum.yml
-- /etc/gontinuum.yml
-`
+- /etc/gontinuum.yml`
 
 // FileExists tells if a given file exists.
 func FileExists(file string) bool {
@@ -105,6 +109,8 @@ func main() {
 		fmt.Println("Another instance is already running, aborting")
 		os.Exit(0)
 	} else {
+		t := time.Now()
+		fmt.Println("Gontinuum running at", t.Format("2006-01-02 15:04"))
 		start := time.Now()
 		builds := BuildModules(config)
 		duration := time.Since(start)

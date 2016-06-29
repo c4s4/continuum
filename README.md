@@ -7,36 +7,39 @@ scheduler. It runs on command line and is triggered by cron.
 Installation
 ------------
 
-Drop your platform executable *gontinuum_os_arch* (in the *bin* directory of
-the distribution archive) somewhere in you *PATH* (in */usr/local/bin/* for
-instance) and rename it *gontinuum*.
+Drop your platform executable *gontinuum_os_arch*, in the *bin* directory of
+the distribution archive, somewhere in you *PATH* and rename it *gontinuum*.
+For instance, on 64 bits Linux, you would  copy *gontinuum_linux_amd64* to 
+*/usr/local/bin/gontinuum*.
 
 Configuration
 -------------
 
 Configuration is in YAML format:
 
-    directory:   /tmp
-    repo_hash:   /tmp/repo-hash.yml
-    port:        6666
-    email:
-      smtp_host: smtp.foo.com:25
-      recipient: foo@bar.com
-      sender:    foo@bar.com
-      success:   false
-    modules:
-      - name:    module1
-        url:     https://github.com/user/module1.git
-        branch:  master
-        command: |
-          set -e
-          commands to run tests
-      - name:    module2
-        url:     https://github.com/user/module2.git
-        branch:  develop
-        command: |
-          set -e
-          commands to run tests
+```yaml
+directory:   /tmp
+repo_hash:   /tmp/repo-hash.yml
+port:        6666
+email:
+  smtp_host: smtp.foo.com:25
+  recipient: foo@bar.com
+  sender:    foo@bar.com
+  success:   false
+modules:
+  - name:    module1
+    url:     https://github.com/user/module1.git
+    branch:  master
+    command: |
+      set -e
+      commands to run tests
+  - name:    module2
+    url:     https://github.com/user/module2.git
+    branch:  develop
+    command: |
+      set -e
+      commands to run tests
+```
 
 The first part indicates:
 
