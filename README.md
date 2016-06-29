@@ -18,27 +18,27 @@ Configuration
 Configuration is in YAML format:
 
 ```yaml
-    directory:   /tmp
-    repo_hash:   /tmp/repo-hash.yml
-    port:        6666
-    email:
-      smtp_host: smtp.foo.com:25
-      recipient: foo@bar.com
-      sender:    foo@bar.com
-      success:   false
-    modules:
-      - name:    module1
-        url:     https://github.com/user/module1.git
-        branch:  master
-        command: |
-          set -e
-          commands to run tests
-      - name:    module2
-        url:     https://github.com/user/module2.git
-        branch:  develop
-        command: |
-          set -e
-          commands to run tests
+directory:   /tmp
+repo_hash:   /tmp/repo-hash.yml
+port:        6666
+email:
+  smtp_host: smtp.foo.com:25
+  recipient: foo@bar.com
+  sender:    foo@bar.com
+  success:   false
+modules:
+  - name:    module1
+    url:     https://github.com/user/module1.git
+    branch:  master
+    command: |
+      set -e
+      commands to run tests
+  - name:    module2
+    url:     https://github.com/user/module2.git
+    branch:  develop
+    command: |
+      set -e
+      commands to run tests
 ```
 
 The first part indicates:
