@@ -7,7 +7,7 @@
  *
  * To get this hash, we run command:
  *
- *   $ git ls-remote https://github.com/c4s4/gontinuum.git
+ *   $ git ls-remote https://github.com/c4s4/continuum.git
  *   dbe955d1d83ea4ec969656d1e002e25ca1382fd8	HEAD
  *   dbe955d1d83ea4ec969656d1e002e25ca1382fd8	refs/heads/master
  *

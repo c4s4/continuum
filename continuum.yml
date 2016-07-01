@@ -13,8 +13,8 @@ modules:
     command: |
       set -e
       commands to run tests
-  - name:    gontinuum
-    url:     ssh://casa@sweetohm.net/home/git/gontinuum.git
+  - name:    continuum
+    url:     ssh://casa@sweetohm.net/home/git/continuum.git
     branch:  master
     command: |
       set -e

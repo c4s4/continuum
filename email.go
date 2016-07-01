@@ -39,7 +39,7 @@ func EmailMessage(builds Builds, start time.Time, duration time.Duration,
 			message += fmt.Sprintf("\n-----------------------------------\n")
 		}
 	}
-	message += "\n--\ngontinuum"
+	message += "\n--\ncontinuum"
 	return message
 }
 

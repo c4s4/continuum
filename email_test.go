@@ -52,7 +52,7 @@ Argh!
 -----------------------------------
 
 --
-gontinuum`
+continuum`
 	builds := []Build{
 		Build{Module: ModuleConfig{Name: "foo"}, Success: true, Skipped: false},
 		Build{Module: ModuleConfig{Name: "bar"}, Success: false, Skipped: false, Output: "Argh!"},

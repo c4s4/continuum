@@ -10,8 +10,8 @@ import (
 
 func TestGetRepoHash(t *testing.T) {
 	moduleConfig := ModuleConfig{
-		Name:    "gontinuum",
-		Url:     "git@github.com:c4s4/gontinuum.git",
+		Name:    "continuum",
+		Url:     "git@github.com:c4s4/continuum.git",
 		Branch:  "master",
 		Command: "echo 'TEST'",
 	}

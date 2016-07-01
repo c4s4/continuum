@@ -1,5 +1,5 @@
 /*
- * Main file for Gontinuum.
+ * Main file for Continuum.
  */
 
 package main
@@ -30,8 +30,8 @@ Where configuration.yml is as follows:
       command: |
         set -e
         commands to run tests
-    - name:    gontinuum
-      url:     ssh://casa@sweetohm.net/home/git/gontinuum.git
+    - name:    continuum
+      url:     ssh://casa@sweetohm.net/home/git/continuum.git
       branch:  master
       command: |
         set -e
@@ -40,9 +40,9 @@ Where configuration.yml is as follows:
 If configuration file is not passed on command line, it will be searched at
 following locations:
 
-- ~/.gontinuum.yml
-- ~/etc/gontinuum.yml
-- /etc/gontinuum.yml`
+- ~/.continuum.yml
+- ~/etc/continuum.yml
+- /etc/continuum.yml`
 
 // FileExists tells if a given file exists.
 func FileExists(file string) bool {
@@ -54,23 +54,23 @@ func FileExists(file string) bool {
 }
 
 // FindConfiguration looks for a configuration file as:
-// - ~/.gontinuum.yml
-// - ~/etc/gontinuum.yml
-// - /etc/gontinuum.yml
+// - ~/.continuum.yml
+// - ~/etc/continuum.yml
+// - /etc/continuum.yml
 // If none of these is found, it stops the program and prints help, else it returns
 // the path of the configuration file.
 func FindConfiguration() string {
 	usr, _ := user.Current()
 	home := usr.HomeDir
-	config := path.Join(home, ".gontinuum.yml")
+	config := path.Join(home, ".continuum.yml")
 	if FileExists(config) {
 		return config
 	}
-	config = path.Join(home, "etc", "gontinuum.yml")
+	config = path.Join(home, "etc", "continuum.yml")
 	if FileExists(config) {
 		return config
 	}
-	config = "/etc/gontinuum.yml"
+	config = "/etc/continuum.yml"
 	if FileExists(config) {
 		return config
 	}
@@ -110,7 +110,7 @@ func main() {
 		os.Exit(0)
 	} else {
 		t := time.Now()
-		fmt.Println("Gontinuum running at", t.Format("2006-01-02 15:04"))
+		fmt.Println("Continuum running at", t.Format("2006-01-02 15:04"))
 		start := time.Now()
 		builds := BuildModules(config)
 		duration := time.Since(start)
