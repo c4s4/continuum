@@ -10,48 +10,41 @@ import (
 	"os/exec"
 	"path"
 	"strings"
+	"time"
 )
 
 // Build is the result of a build.
 type Build struct {
-	Module  ModuleConfig
-	Success bool
-	Skipped bool
-	Output  string
+	Module   ModuleConfig
+	Previous bool
+	Success  bool
+	Skipped  bool
+	Output   string
 }
 
 // Builds is a list of builds of the configuration.
 type Builds []Build
 
 func (build Build) String() string {
-	if !build.Skipped {
-		if build.Success {
-			return "OK"
-		} else {
-			return "ERROR"
-		}
-	} else {
+	if build.Skipped {
 		return "SKIPPED"
-	}
-}
-
-// Success tells if a list of builds was a success (that is if all buils were
-// successful).
-func (builds Builds) Success() bool {
-	for _, build := range builds {
-		if !build.Success {
-			return false
+	} else {
+		if build.Success {
+			return "SUCCESS"
+		} else {
+			return "FAILURE"
 		}
 	}
-	return true
 }
 
-// String returns a string that represents success or failure.
-func (builds Builds) String() string {
-	if builds.Success() {
-		return "SUCCESS"
+func (build Build) SendEmail(config EmailConfig) bool {
+	if build.Skipped {
+		return false
+	}
+	if config.Once {
+		return build.Success != build.Previous
 	} else {
-		return "FAILURE"
+		return !build.Success || (build.Success && config.Success)
 	}
 }
 
@@ -115,30 +108,42 @@ func BuildModule(module ModuleConfig, directory string) Build {
 // order).
 func BuildModules(config Config) Builds {
 	builds := make(Builds, len(config.Modules))
-	repoHashMap := LoadRepoHashMap(config.RepoHash)
-	for index, module := range config.Modules {
+	modulesInfo := LoadModulesInfo(config.Status)
+	for _, module := range config.Modules {
 		fmt.Printf("Building '%s'... ", module.Name)
+		start := time.Now()
 		repoHash := GetRepoHash(module)
 		var build Build
-		if repoHashMap[module.Name] == "" ||
-			(repoHashMap[module.Name] != repoHash) {
+		if modulesInfo[module.Name].RepoHash == "" {
 			build = BuildModule(module, config.Directory)
+			build.Previous = true
+		} else if modulesInfo[module.Name].RepoHash != repoHash {
+			build = BuildModule(module, config.Directory)
+			build.Previous = modulesInfo[module.Name].BuildOK
 		} else {
 			build = Build{
-				Module:  module,
-				Success: true,
-				Skipped: true,
-				Output:  "",
+				Module:   module,
+				Previous: modulesInfo[module.Name].BuildOK,
+				Success:  modulesInfo[module.Name].BuildOK,
+				Skipped:  true,
+				Output:   "",
 			}
 		}
-		builds[index] = build
+		duration := time.Since(start)
 		fmt.Println(build.String())
+		SendEmail(build, start, duration, config.Email)
 		if build.Success {
-			repoHashMap[module.Name] = repoHash
+			modulesInfo[module.Name] = ModuleInfo{
+				RepoHash: repoHash,
+				BuildOK:  true,
+			}
 		} else {
-			repoHashMap[module.Name] = "ERROR"
+			modulesInfo[module.Name] = ModuleInfo{
+				RepoHash: repoHash,
+				BuildOK:  false,
+			}
 		}
 	}
-	SaveRepoHashMap(repoHashMap, config.RepoHash)
+	SaveModulesInfo(modulesInfo, config.Status)
 	return builds
 }

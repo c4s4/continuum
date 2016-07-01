@@ -10,8 +10,8 @@ import (
 
 func TestGetRepoHash(t *testing.T) {
 	moduleConfig := ModuleConfig{
-		Name:    "gontinuum",
-		Url:     "git@github.com:c4s4/gontinuum.git",
+		Name:    "continuum",
+		Url:     "git@github.com:c4s4/continuum.git",
 		Branch:  "master",
 		Command: "echo 'TEST'",
 	}
@@ -21,40 +21,56 @@ func TestGetRepoHash(t *testing.T) {
 	}
 }
 
-const testRepoHashMap = `module1: dbe955d1d83ea4ec969656d1e002e25ca1382fd8
-module2: c634c54781a89253167076ce102e588af8a60141
+const testModulesInfo = `module1:
+  repo-hash: dbe955d1d83ea4ec969656d1e002e25ca1382fd8
+  build-ok: true
+module2:
+  repo-hash: c634c54781a89253167076ce102e588af8a60141
+  build-ok: false
 `
 
-func TestLoadRepoHashMap(t *testing.T) {
+func TestLoadModulesInfo(t *testing.T) {
 	tempFile, err := ioutil.TempFile("/tmp", "go-test-")
 	if err != nil {
 		panic(errors.New("Could not open temp file"))
 	}
-	_, err = tempFile.WriteString(testRepoHashMap)
+	_, err = tempFile.WriteString(testModulesInfo)
 	if err != nil {
 		panic(errors.New("Could not write temp file"))
 	}
 	defer os.Remove(tempFile.Name())
-	repoHashMap := LoadRepoHashMap(tempFile.Name())
-	if repoHashMap["module1"] != "dbe955d1d83ea4ec969656d1e002e25ca1382fd8" {
+	modulesInfo := LoadModulesInfo(tempFile.Name())
+	if modulesInfo["module1"].RepoHash != "dbe955d1d83ea4ec969656d1e002e25ca1382fd8" {
 		t.Error("Bad repo hash")
 	}
-	if repoHashMap["module2"] != "c634c54781a89253167076ce102e588af8a60141" {
+	if modulesInfo["module1"].BuildOK != true {
+		t.Error("Bad build status")
+	}
+	if modulesInfo["module2"].RepoHash != "c634c54781a89253167076ce102e588af8a60141" {
 		t.Error("Bad repo hash")
+	}
+	if modulesInfo["modules2"].BuildOK != false {
+		t.Error("Bad build status")
 	}
 }
 
-const TestRepoHashFile = "/tmp/test-repo-hash.yml"
+const TestModulesInfoFile = "/tmp/test-repo-hash.yml"
 
-func TestSaveRepoHash(t *testing.T) {
-	repoHashMap := RepoHashMap{
-		"module1": "dbe955d1d83ea4ec969656d1e002e25ca1382fd8",
-		"module2": "c634c54781a89253167076ce102e588af8a60141",
+func TestSaveModulesInfo(t *testing.T) {
+	modulesInfo := ModulesInfo{
+		"module1": ModuleInfo{
+			RepoHash: "dbe955d1d83ea4ec969656d1e002e25ca1382fd8",
+			BuildOK:  true,
+		},
+		"module2": ModuleInfo{
+			RepoHash: "c634c54781a89253167076ce102e588af8a60141",
+			BuildOK:  false,
+		},
 	}
-	SaveRepoHashMap(repoHashMap, TestRepoHashFile)
-	defer os.Remove(TestRepoHashFile)
-	actual, _ := ioutil.ReadFile(TestRepoHashFile)
-	if string(actual) != testRepoHashMap {
+	SaveModulesInfo(modulesInfo, TestModulesInfoFile)
+	defer os.Remove(TestModulesInfoFile)
+	actual, _ := ioutil.ReadFile(TestModulesInfoFile)
+	if string(actual) != testModulesInfo {
 		t.Error("Error writing repo file")
 	}
 }

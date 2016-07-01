@@ -1,0 +1,16 @@
+directory: /tmp
+status:    /tmp/continuum-status.yml
+port:      6666
+email:
+  smtp-host: smtp.nowhere.com:25
+  recipient: nobody@nowhere.com
+  sender:    nobody@nowhere.com
+  success:   true
+  once:      true
+modules:
+  - name:    Continuum
+    url:     https://github.com/c4s4/continuum.git
+    branch:  develop
+    command: |
+      set -e
+      make test

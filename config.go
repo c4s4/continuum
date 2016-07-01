@@ -6,21 +6,18 @@
  *   repo_hash:   /tmp/repo-status.yml
  *   port:        6666
  *   email:
- *     smtp_host: smtp.orange.fr:25
- *     recipient: casa@sweetohm.net
- *     sender:    casa@sweetohm.net
+ *     smtp_host: smtp.example.com:25
+ *     recipient: nobody@nowhere.com
+ *     sender:    nobody@nowhere.com
  *     success:   true
+ *     once:      true
  *   modules:
- *   - name:    module1
- *     url:     https://repository/url/module1.git
- *     branch:  branch1
+ *   - name:    continuum
+ *     url:     git@github.com:c4s4/continuum.git
+ *     branch:  develop
  *     command: |
- *       command to run tests
- *   - name:    module2
- *     url:     https://repository/url/module2.git
- *     branch:  branch2
- *     command: |
- *       command to run tests
+ *       set -e
+ *       make test
  */
 
 package main
@@ -33,10 +30,11 @@ import (
 
 // EmailConfig is the configuration to send email report.
 type EmailConfig struct {
-	SmtpHost  string "smtp_host"
+	SmtpHost  string "smtp-host"
 	Recipient string
 	Sender    string
 	Success   bool
+	Once      bool
 }
 
 // ModuleConfig is the configuration for a given module.
@@ -50,7 +48,7 @@ type ModuleConfig struct {
 // Config is the global configuration of the application.
 type Config struct {
 	Directory string
-	RepoHash  string "repo_hash"
+	Status    string
 	Port      int
 	Email     EmailConfig
 	Modules   []ModuleConfig
