@@ -9,48 +9,44 @@ import (
 const testConfigFile = "/tmp/test-config.yml"
 
 func TestLoadConfig(t *testing.T) {
-	config := `directory:   /tmp
-repo_hash:   /tmp/repo-hash.yml
+	config := `directory: /tmp
+status:    /tmp/repo-hash.yml
 email:
-  smtp_host: smtp.orange.fr:25
-  recipient: casa@sweetohm.net
-  sender:    casa@sweetohm.net
+  smtp-host: smtp.example.com:25
+  recipient: nobody@nowhere.com
+  sender:    nobody@nowhere.com
   success:   true
+  once:      true
 modules:
-- name:    module1
-  url:     https://repository/url/module1.git
-  command: command to run tests
-- name:    module2
-  url:     https://repository/url/module2.git
-  command: command to run tests`
+- name:    continuum
+  url:     git@github.com:c4s4/continuum.git
+  command: |
+    set -e
+    make test`
 	ioutil.WriteFile(testConfigFile, []byte(config), 0666)
 	defer os.Remove(testConfigFile)
 	expected := Config{
 		Directory: "/tmp",
-		RepoHash:  "/tmp/repo-hash.yml",
+		Status:    "/tmp/repo-hash.yml",
 		Email: EmailConfig{
-			SmtpHost:  "smtp.orange.fr:25",
-			Recipient: "casa@sweetohm.net",
-			Sender:    "casa@sweetohm.net",
+			SmtpHost:  "smtp.example.com:25",
+			Recipient: "nobody@nowhere.com",
+			Sender:    "nobody@nowhere.com",
 			Success:   true,
+			Once:      true,
 		},
 		Modules: []ModuleConfig{
 			ModuleConfig{
-				Name:    "module1",
-				Url:     "https://repository/url/module1.git",
-				Command: "command to run tests",
-			},
-			ModuleConfig{
-				Name:    "module2",
-				Url:     "https://repository/url/module2.git",
-				Command: "command to run tests",
+				Name:    "continuum",
+				Url:     "git@github.com:c4s4/continuum.git",
+				Command: "set -e\nmake test",
 			},
 		},
 	}
 	actual := LoadConfig(testConfigFile)
 	if expected.Directory != actual.Directory ||
 		expected.Email != actual.Email ||
-		expected.RepoHash != actual.RepoHash {
+		expected.Status != actual.Status {
 		t.Error("Broken configuration loader")
 	}
 	if len(expected.Modules) != len(actual.Modules) {

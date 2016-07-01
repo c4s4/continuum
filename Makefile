@@ -13,6 +13,7 @@ help:
 	@echo "$(CYAN)help$(CLEAR)     Print this help page"
 	@echo "$(CYAN)deps$(CLEAR)     Install GO dependencies"
 	@echo "$(CYAN)build$(CLEAR)    Build the application"
+	@echo "$(CYAN)run$(CLEAR)      Run the application"
 	@echo "$(CYAN)archive$(CLEAR)  Build the distribution archive"
 	@echo "$(CYAN)release$(CLEAR)  Release project" 
 	@echo "$(CYAN)clean$(CLEAR)    Clean generated file"
@@ -30,6 +31,10 @@ build: clean test
 	@echo "$(YELLOW)Building application$(CLEAR)"
 	mkdir -p $(BUILD_DIR)
 	go build -o $(BUILD_DIR)/$(NAME)
+
+run: build
+	@echo "$(YELLOW)Running application$(CLEAR)"
+	build/continuum continuum.yml
 
 archive: build
 	@echo "$(YELLOW)Building distribution archive$(CLEAR)"

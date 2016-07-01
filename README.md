@@ -18,53 +18,51 @@ Configuration
 Configuration is in YAML format:
 
 ```yaml
-directory:   /tmp
-repo_hash:   /tmp/repo-hash.yml
-port:        6666
+directory: /tmp
+status:    /tmp/continuum-status.yml
+port:      6666
 email:
-  smtp_host: smtp.foo.com:25
-  recipient: foo@bar.com
-  sender:    foo@bar.com
-  success:   false
+  smtp-host: smtp.nowhere.com:25
+  recipient: nobody@nowhere.com
+  sender:    nobody@nowhere.com
+  success:   true
+  once:      true
 modules:
-  - name:    module1
-    url:     https://github.com/user/module1.git
-    branch:  master
-    command: |
-      set -e
-      commands to run tests
-  - name:    module2
-    url:     https://github.com/user/module2.git
+  - name:    Continuum
+    url:     https://github.com/c4s4/continuum.git
     branch:  develop
     command: |
       set -e
-      commands to run tests
+      make test
 ```
 
 The first part indicates:
 
 - **directory**: the directory where modules will be checked out. Currently only
   GIT projects are supported.
-- **repo_hash**: this is the name of the file were are stored repositories hash
-  (to determine if they changed since last run).
+- **status**: this is the name of the file were are stored modules status (to 
+  determine if their repository changed since last run and if last build was a
+  success or a failure).
 - **port**: the port that continuum listens to ensure that only one instance is
   running at a time. This port should be free on the host machine.
 - **email**: put *~* if you don't want any email.
 
 If you wait to receive email reports, provide following fields:
 
-- **smtp_host**: the hostname and port of your SMTP server.
+- **smtp-host**: the hostname and port of your SMTP server.
 - **recipient**:  the email of the recipient of the build report.
 - **sender**: the email address if the sender of the report.
 - **success**: tells if continuum should send an email on success. If *false*,
   it will only send an email on build error.
+- **once**: if you want to send a single mail while the status of a module
+  changes.
 
 The second part is made of the list of modules, with, for each module:
 
 - **name**: the name of the module.
 - **url**: the URL of the module that GIT will use to get the sources.
 - **branch**: the branch to build (such as *master* or *develop*).
-- **command**: the command to run tests, must return 0 on success and a 
+- **command**: the bash script to run tests, must return 0 on success and a 
   different value on error (as any Unix script should).
 
 You can pass the configuration file to use on command line. If you pass no 
@@ -72,7 +70,6 @@ configuration file on command line, continuum will look for following files to
 use:
 
 - *~/.continuum.yml*
-- *~/etc/continuum.yml*
 - */etc/gontinumm.yml*
 
 Crontab
@@ -81,18 +78,30 @@ Crontab
 This script is triggered using cron, with a configuration as follows (in file
 */etc/cron.d/continuum*):
 
-    0   * * * *  me    continuum
+```bash
+# /etc/cron.d/continuum
+# cron configuration to run gontinuum
 
-This will run continuum every hour. When continuum starts, it checks if 
+SHELL=/bin/sh
+PATH=/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=""
+
+# run continuum every 15 minutes
+*/15 * * * *    user    continuum >> /tmp/continuum.log
+```
+
+This will run continuum every 15 minutes. When continuum starts, it checks if 
 repository has changed for all modules, comparing its hash with the one stored
-in *repo_hash* file.
+in *status* file.
 
 If repository has changed, continuum clones it and runs command for tests. If 
-commands return 0 (which is the Unix standard to tell that a command was
+script returns 0 (which is the Unix standard to tell that a command was
 successful), the test is OK, else it is a failure.
 
-Continuum prints a summary of the tests results and sends an email if one test
-failed. It also sends a report if no test failed and *success* configuration
-field was set to *true*.
+Continuum prints a summary of the tests results and sends an email (or not
+depending on email settings) for each test. Recommanded email configuration is
+to set *success* and *once* to *true*. This will send an email when status of
+a module changes (that is on test success when module was broken and test
+failure when it was OK).
 
 *Enjoy!*
