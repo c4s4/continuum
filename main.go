@@ -95,7 +95,7 @@ func main() {
 	configFile := CheckArguments()
 	config := LoadConfig(configFile)
 	if IsAnotherInstanceRunning(config.Port) {
-		fmt.Println("Another instance is already running, aborting")
+		fmt.Fprintf(os.Stderr, "Another instance is already running, aborting")
 		os.Exit(0)
 	} else {
 		start := time.Now()
