@@ -104,4 +104,9 @@ to set *success* and *once* to *true*. This will send an email when status of
 a module changes (that is on test success when module was broken and test
 failure when it was OK).
 
+TODO
+----
+
+- Fix spam when failing to clone repository.
+
 *Enjoy!*
