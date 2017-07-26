@@ -1,0 +1,17 @@
+# NeON build file (http://github.com/c4s4/neon)
+
+extends:
+- c4s4/build/go-tool.yml
+
+properties:
+  LIBRARIES:
+  - 'github.com/mitchellh/gox'
+  - 'gopkg.in/yaml.v1'
+
+targets:
+
+  run:
+    doc: Run continuum
+    depends: bin
+    steps:
+    - '$ build/continuum continuum.yml'
