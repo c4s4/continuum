@@ -1,3 +1,11 @@
+# Semantic changelog (http://github.com/c4s4/changelog)
+
+- version: 0.4.2-SNAPSHOT
+  date:    2017-00-00
+  summery: ???
+  fixed:
+  - "Replaced Makefile with NeON build file."
+
 - version: 0.4.1
   date:    2016-08-09
   summary: Print error message on stderr
