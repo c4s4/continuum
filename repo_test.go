@@ -9,7 +9,7 @@ import (
 )
 
 func TestGetRepoHash(t *testing.T) {
-	if os.Getenv("TRAVIS") != "true" {
+	if os.Getenv("TRAVIS") == "true" {
 		t.Skip("skipping test on travis")
 	}
 	moduleConfig := ModuleConfig{
