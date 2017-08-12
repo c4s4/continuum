@@ -1,6 +1,10 @@
 CONTINUUM
 =========
 
+[![Build Status](https://travis-ci.org/c4s4/continuum.svg?branch=master)](https://travis-ci.org/c4s4/continuum)
+[![Coverage Status](https://coveralls.io/repos/github/c4s4/continuum/badge.svg?branch=master)](https://coveralls.io/github/c4s4/continuum?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/c4s4/continuum)](https://goreportcard.com/report/github.com/c4s4/continuum)
+
 Continuum is a lightweight continuous integration tool: no web interface, no
 scheduler. It runs on command line and is triggered by cron.
 
@@ -103,5 +107,10 @@ depending on email settings) for each test. Recommanded email configuration is
 to set *success* and *once* to *true*. This will send an email when status of
 a module changes (that is on test success when module was broken and test
 failure when it was OK).
+
+TODO
+----
+
+- Fix spam when failing to clone repository.
 
 *Enjoy!*

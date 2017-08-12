@@ -1,0 +1,3 @@
+language: go
+env:
+- TRAVIS=true

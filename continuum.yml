@@ -11,6 +11,4 @@ modules:
   - name:    Continuum
     url:     https://github.com/c4s4/continuum.git
     branch:  develop
-    command: |
-      set -e
-      make test
+    command: neon test

@@ -9,6 +9,9 @@ import (
 )
 
 func TestGetRepoHash(t *testing.T) {
+	if os.Getenv("TRAVIS") == "true" {
+		t.Skip("skipping test on travis")
+	}
 	moduleConfig := ModuleConfig{
 		Name:    "continuum",
 		Url:     "git@github.com:c4s4/continuum.git",
