@@ -28,24 +28,24 @@ type Builds []Build
 func (build Build) String() string {
 	if build.Skipped {
 		return "SKIPPED"
-	} else {
-		if build.Success {
-			return "SUCCESS"
-		} else {
-			return "FAILURE"
-		}
 	}
+	if build.Success {
+		return "SUCCESS"
+	}
+	return "FAILURE"
 }
 
+// Tell if should send an email:
+// - config: email configuration.
+// Return a bool that tells if should send email.
 func (build Build) SendEmail(config EmailConfig) bool {
 	if build.Skipped {
 		return false
 	}
 	if config.Once {
 		return build.Success != build.Previous
-	} else {
-		return !build.Success || (build.Success && config.Success)
 	}
+	return !build.Success || (build.Success && config.Success)
 }
 
 // BuildModule is called to build a module, that is:
@@ -80,27 +80,25 @@ func BuildModule(module ModuleConfig, directory string) Build {
 			Skipped: false,
 			Output:  string(output),
 		}
-	} else {
-		defer os.RemoveAll(moduleDir)
-		os.Chdir(moduleDir)
-		// run the build command
-		cmd := exec.Command("bash", "-c", module.Command)
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			return Build{
-				Module:  module,
-				Success: false,
-				Skipped: false,
-				Output:  strings.TrimSpace(string(output)),
-			}
-		} else {
-			return Build{
-				Module:  module,
-				Success: true,
-				Skipped: false,
-				Output:  string(output),
-			}
+	}
+	defer os.RemoveAll(moduleDir)
+	os.Chdir(moduleDir)
+	// run the build command
+	cmd := exec.Command("bash", "-c", module.Command)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return Build{
+			Module:  module,
+			Success: false,
+			Skipped: false,
+			Output:  strings.TrimSpace(string(out)),
 		}
+	}
+	return Build{
+		Module:  module,
+		Success: true,
+		Skipped: false,
+		Output:  string(out),
 	}
 }
 

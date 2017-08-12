@@ -69,9 +69,8 @@ func LoadModulesInfo(file string) ModulesInfo {
 		text, _ := ioutil.ReadFile(file)
 		yaml.Unmarshal(text, &modulesInfo)
 		return modulesInfo
-	} else {
-		return make(ModulesInfo)
 	}
+	return make(ModulesInfo)
 }
 
 // SaveModulesInfo saves modules info in a given file.

@@ -30,7 +30,7 @@ import (
 
 // EmailConfig is the configuration to send email report.
 type EmailConfig struct {
-	SmtpHost  string "smtp-host"
+	SmtpHost  string `yaml:"smtp-host"`
 	Recipient string
 	Sender    string
 	Success   bool
