@@ -35,7 +35,7 @@ func (build Build) String() string {
 	return "FAILURE"
 }
 
-// SendMail tells if should send an email:
+// SendEmail tells if should send an email:
 // - config: email configuration.
 // Return a bool that tells if should send email.
 func (build Build) SendEmail(config EmailConfig) bool {
