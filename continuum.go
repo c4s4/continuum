@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+// Help page
 const Help = `Usage: goontinuum [configuration.yml]
 Where configuration.yml is as follows:
 
@@ -42,9 +43,8 @@ following locations:
 func FileExists(file string) bool {
 	if _, err := os.Stat(file); err == nil {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 // FindConfiguration looks for a configuration file as:
@@ -82,12 +82,10 @@ func CheckArguments() string {
 			fmt.Println(Help)
 			os.Exit(0)
 			return ""
-		} else {
-			return os.Args[1]
 		}
-	} else {
-		return FindConfiguration()
+		return os.Args[1]
 	}
+	return FindConfiguration()
 }
 
 // main function that iterate on configuration files passed on command line.
