@@ -3,8 +3,9 @@
 - version: 0.4.2-SNAPSHOT
   date:    2017-00-00
   summary: NeON build file
-  fixed:
+  added:
   - "Replaced Makefile with NeON build file."
+  - "Added travis configuration file."
 
 - version: 0.4.1
   date:    2016-08-09
