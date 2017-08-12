@@ -36,7 +36,7 @@ modules:
 			Once:      true,
 		},
 		Modules: []ModuleConfig{
-			ModuleConfig{
+			{
 				Name:    "continuum",
 				Url:     "git@github.com:c4s4/continuum.git",
 				Command: "set -e\nmake test",
