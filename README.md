@@ -3,7 +3,9 @@ CONTINUUM
 
 [![Build Status](https://travis-ci.org/c4s4/continuum.svg?branch=master)](https://travis-ci.org/c4s4/continuum)
 [![Code Quality](https://goreportcard.com/badge/github.com/c4s4/continuum)](https://goreportcard.com/report/github.com/c4s4/continuum)
+<!--
 [![Coverage Report](https://coveralls.io/repos/github/c4s4/continuum/badge.svg?branch=master)](https://coveralls.io/github/c4s4/continuum?branch=master)
+-->
 
 Continuum is a lightweight continuous integration tool: no web interface, no
 scheduler. It runs on command line and is triggered by cron.
