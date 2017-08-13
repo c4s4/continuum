@@ -1,9 +1,3 @@
 language: go
 env:
 - TRAVIS=true
-before_install:
-- go get github.com/mattn/goveralls
-- go get golang.org/x/tools/cmd/cover
-script:
-- $HOME/gopath/bin/goveralls -repotoken  LYZbUYi5xpbycfiKsVnJ
-- go test -race -v . -tags "$GOTAGS"
