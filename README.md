@@ -3,6 +3,7 @@ CONTINUUM
 
 [![Build Status](https://travis-ci.org/c4s4/continuum.svg?branch=master)](https://travis-ci.org/c4s4/continuum)
 [![Code Quality](https://goreportcard.com/badge/github.com/c4s4/continuum)](https://goreportcard.com/report/github.com/c4s4/continuum)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 <!--
 [![Coverage Report](https://coveralls.io/repos/github/c4s4/continuum/badge.svg?branch=master)](https://coveralls.io/github/c4s4/continuum?branch=master)
 -->
