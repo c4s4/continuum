@@ -1,7 +1,7 @@
 # NeON build file (http://github.com/c4s4/neon)
 
 extends:
-- c4s4/build/go-tool.yml
+- c4s4/build/golang.yml
 
 properties:
   LIBRARIES:
@@ -14,4 +14,4 @@ targets:
     doc: Run continuum
     depends: bin
     steps:
-    - '$ build/continuum continuum.yml'
+    - $: ['build/continuum', 'continuum.yml']
