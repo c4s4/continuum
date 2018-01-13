@@ -2,6 +2,7 @@
 
 extends:
 - c4s4/build/golang.yml
+- c4s4/build/release.yml
 
 properties:
   LIBRARIES:
