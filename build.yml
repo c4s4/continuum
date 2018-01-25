@@ -5,6 +5,7 @@ extends:
 - c4s4/build/release.yml
 
 properties:
+  NAME: 'continuum'
   LIBRARIES:
   - 'github.com/mitchellh/gox'
   - 'gopkg.in/yaml.v1'
